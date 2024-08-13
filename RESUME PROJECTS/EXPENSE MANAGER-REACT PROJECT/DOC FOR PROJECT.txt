@@ -1,0 +1,23 @@
+Prerequisites and Technologies Used in Expense Tracker:
+-----------------------------------------------------
+Node.js
+React
+JavaScript
+HTML/CSS
+
+
+
+
+the project involves creating a user interface that enables 
+users to add, edit, and delete expenses effortlessly.
+Additionally, the application maintains an updated list of
+expenses within its state. The total expenses are. Displayed 
+for visibility. By utilizing React components the codebase 
+remains structured and modular, for maintenance and scalability.
+
+
+
+GIT REPO : https://github.com/AidaSoji123/EXPENSE_MANAGER-REACT-PROJECT.git
+	   ----------------------------------------------------------------	
+
+-----here please connect this into firbase-----

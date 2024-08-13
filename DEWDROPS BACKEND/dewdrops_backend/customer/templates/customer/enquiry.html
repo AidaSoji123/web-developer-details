@@ -1,0 +1,39 @@
+<!-- customer/templates/customer/enquiry.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enquiry</title>
+</head>
+<body>
+    <h1>Enquiry Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="phone">Phone:</label><br>
+        <input type="text" id="phone" name="phone" required><br>
+        <label for="date_of_function">Date of Function:</label><br>
+        <input type="date" id="date_of_function" name="date_of_function" required><br>
+        <label for="time_of_function">Time of Function:</label><br>
+        <input type="time" id="time_of_function" name="time_of_function" required><br>
+        <label for="event_type">Event Type:</label><br>
+        <select id="event_type" name="event_type" required>
+            <option value="wedding">Wedding</option>
+            <option value="private_event">Private Event</option>
+            <option value="corporate_event">Corporate Event</option>
+            <option value="birthday_party">Birthday Party</option>
+            <option value="other">Other</option>
+        </select><br>
+        <label for="venue">Venue:</label><br>
+        <input type="text" id="venue" name="venue"><br>
+        <label for="estimated_guests">Estimated Number of Guests:</label><br>
+        <input type="number" id="estimated_guests" name="estimated_guests"><br>
+        <label for="message">Message or Further Details:</label><br>
+        <textarea id="message" name="message"></textarea><br>
+        <input type="submit" value="Submit">
+        <input type="button" value="Close" onclick="window.location.href='/'">
+    </form>
+</body>
+</html>

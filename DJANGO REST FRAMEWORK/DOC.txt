@@ -1,0 +1,303 @@
+DJANGO REST FRAME WORK  (https://www.django-rest-framework.org/)
+**********************
+
+To communicate frontend with backend using API
+
+	in API we are use JSON format to retrieve and pass data
+
+
+To pass and retrieve JSON data via using SERIALIZERS.
+	
+		DJANGO REST FRAME WORK 
+		**********************
+
+pip install djangorestframework
+
+	in VIEWS.PY
+	-----------
+
+	from rest_framework.decorators import api_view
+	from rest_framework.response import Response
+
+	
+	@api_view(['GET'])
+	def index(request):
+    		people_detail = {
+        		'name': 'John Doe',
+        		'age': 30,
+        		'city': 'New York'
+    		}
+    		return Response(people_detail)
+
+
+
+--CREATE A API FOLDER AND IN THAT FOLDER CREATE AN __init__.py file
+
+	for working api folder there must be an __init__ python file 
+
+--CREATE A FILE TOO IN API FOLDER NAMED urls.py
+
+	from django.urls import path
+	from home .views import index
+
+	urlpatterns = [
+    		path('index/', index, name='index'),
+	]
+
+
+----INCLUDE THIS URL IN PROJECTS URL:
+
+	  path('api/',include('api.urls')),
+
+API call is like--> www.example.com/api/index
+
+----------------------------------------------------------------------
+
+python manage.py runserver
+
+
+in views we can add more methods in api decorator
+
+
+	@api_view(['GET','POST','PUT'])
+	def index(request):
+    		if request.method== "GET":
+        		people_detail = {
+        		     'name': 'John Doe',
+            		     'age': 30,
+            		     'city': 'New York'
+        			}
+        		return Response(people_detail)
+    		elif request.method == "POST":
+        		return Response('This is a POST method')
+    		elif request.method == "PUT":
+        		return Response('This is a PUT method')
+
+----------------------------------------------------------------------
+
+
+        SERIALIZERS
+	***********
+
+create models.py
+----------------
+
+from django.db import models
+
+# Create your models here.
+class Person(models.Model):
+    name = models.CharField(max_length=50)
+    age = models.IntegerField()
+    location = models.CharField(max_length=100)
+
+
+
+---->python manage.py makemigrations
+---->python manage.py migrate
+
+
+
+create a file named serializer.py in app
+----------------------------------------
+
+from rest_framework import serializers
+from . models import Person
+
+class PersonSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Person
+        fields = '__all__'
+
+
+
+
+Also we can add validation to the serializer:
+---------------------------------------------
+
+    def validate(self, data):
+        spl_chars = "!@#$%^&*()_+=-`~"
+        
+        if any (c in spl_chars for c in data['name']):
+            raise serializers.ValidationError("Name cannot contain special characters")
+        
+        if data['age'] < 18 :
+            raise serializers.ValidationError("Age should not be less than 18")
+            
+        return data
+
+
+In djangorestframework how we can use forienkey in SERIALIZERS
+--------------------------------------------------------------
+first create a Team model like below and add the forienkey into the person
+
+
+from django.db import models
+
+class Team(models.Model):
+    team_name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.team_name
+
+
+# Create your models here.
+
+class Person(models.Model):
+    team = models.ForeignKey(Team,null=True, blank=True, on_delete=models.CASCADE, related_name='members', default=None)
+    name = models.CharField(max_length=50)
+    age = models.IntegerField()
+    location = models.CharField(max_length=100)
+
+THEN CREATE A SUPER USER AND REGISTER 2 MODEL IN THAT
+------------------------------------------------
+
+python manage.py createsuperuser
+Username (leave blank to use 'lenovo'): admin
+Email address: 
+Password: 
+
+
+IN ADMIN.PY
+-----------
+from django.contrib import admin
+from .models import Person, Team
+
+admin.site.register(Team)
+admin.site.register(Person)
+
+
+
+
+and then alter the views, models and serializer given below:--
+-------------------------------------------------------------
+
+models:
+-------
+
+from django.db import models
+
+class Team(models.Model):
+    team_name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.team_name
+
+class Person(models.Model):
+    team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.CASCADE, related_name='members', default=None)
+    name = models.CharField(max_length=50)
+    age = models.IntegerField()
+    location = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
+
+
+views:
+------
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from home.models import Person
+from home.serializer import PersonSerializer
+
+@api_view(['GET', 'POST', 'PUT'])
+def index(request):
+    if request.method == "GET":
+        people_detail = {
+            'name': 'John Doe',
+            'age': 30,
+            'city': 'New York'
+        }
+        return Response(people_detail, status=status.HTTP_200_OK)
+    elif request.method == "POST":
+        return Response('This is a POST method', status=status.HTTP_200_OK)
+    elif request.method == "PUT":
+        return Response('This is a PUT method', status=status.HTTP_200_OK)
+
+@api_view(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+def person(request):
+    if request.method == "GET":
+        objPerson = Person.objects.filter(team__isnull=False)
+        serializer = PersonSerializer(objPerson, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == "POST":
+        data = request.data
+        serializer = PersonSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == "PUT":
+        try:
+            obj = Person.objects.get(id=request.data['id'])
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = PersonSerializer(obj, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == "PATCH":
+        try:
+            obj = Person.objects.get(id=request.data['id'])
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = PersonSerializer(obj, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == "DELETE":
+        try:
+            obj = Person.objects.get(id=request.data['id'])
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        obj.delete()
+        return Response({'message': 'Person deleted'}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+serializer:
+-----------
+
+from rest_framework import serializers
+from .models import Person, Team
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ['team_name']
+        
+class PersonSerializer(serializers.ModelSerializer):
+    team = TeamSerializer()
+
+    class Meta:
+        model = Person
+        fields = '__all__'
+        depth = 1
+            
+    def validate(self, data):
+        spl_chars = "!@#$%^&*()_+=-`~"
+        
+        if any(c in spl_chars for c in data['name']):
+            raise serializers.ValidationError("Name cannot contain special characters")
+        
+        if data['age'] < 18:
+            raise serializers.ValidationError("Age should not be less than 18")
+            
+        return data
+
+
+
+-----------------------------------------------------------------------------

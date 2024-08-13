@@ -1,0 +1,137 @@
+.sidedive{
+  background-color: black;
+}
+.sidedive2{
+  background-color: #bacad9;;
+}
+.sidedive3{
+  background-color: #bacad9;;
+}
+.sidedive4{
+  background-color: #070505d0;
+}
+.firstdiv{
+  background-image: url('/public/Assets/Images/bg2\ \(2\).JPG');
+  background-size: cover;
+  width: 100%;
+  height: 800px;
+
+  background-position: top left;
+  animation: mymove 5s infinite;
+}
+
+@keyframes mymove {
+  50% {background-position: center;}
+}
+
+.seconddiv{
+  width: 100%;
+  height: 500px;
+  padding-left: 150px;
+  padding-top: 9px;
+}
+.abtimg{
+  border-radius: 5px;
+  height: 450px;
+  width: 500px;
+}
+.about{
+  color: yellow;
+  padding-top: 80px;
+  padding-left: 270px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.abhead{
+ color: white;
+  padding-top: 10px;
+ padding-left: 160px;
+ font-family: 'Times New Roman', Times, serif;
+}
+.abcontent{
+  color: white;
+  padding-top: 20px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.thirddiv{
+  width: 100%;
+  height: 500px;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #bacad9;;
+}
+.catering{
+    font-family: 'Times New Roman', Times, serif;
+    padding-top: 100px;
+}
+.catimg{
+  border-radius: 7px;
+  height: 370px;
+  width: 570px;
+  margin-left: 70px;
+}
+.eventimg{
+  border-radius: 5px;
+  height: 700px;
+  width: 500px;
+}
+.div4{
+  width: 100%;
+  height: 400px;
+  width: 100%;
+  padding-left: 150px;
+  background-color: #bacad9;;
+}
+.event{
+  font-family: 'Times New Roman', Times, serif;
+  padding-top: 100px;
+}
+.eventimg{
+  border-radius: 5px;
+  height: 370px;
+  width: 570px; 
+  padding-top: 0px;
+}
+.firstpart{
+  height: 300px;
+  padding-top: 60px;
+}
+.secondpart{
+  height: 300px;
+  padding-top: 60px;
+}
+.thirdpart{
+  height: 300px;
+}
+.contact{
+  color: white;
+  font-family: 'Times New Roman', Times, serif;
+  padding-left: 250px;
+}
+.contactcontent{
+  color: white;
+  font-family: 'Times New Roman', Times, serif;
+  padding-left: 250px;
+}
+.connectus{
+  color: white;
+  font-family: 'Times New Roman', Times, serif;
+  padding-left: 150px;
+}
+.nmbr{
+  color: rgb(74, 5, 236);
+  padding-left: 190px;
+  padding-top: 30px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nmbr2{
+  color:  rgb(74, 5, 236);
+  padding-left: 190px;
+}
+.dewmail{
+  padding-top: 20px;
+  padding-left: 20px;
+}
